@@ -1,19 +1,20 @@
 {
   description = "My NixOS Flake Configuration";
 
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = ["x86_64-linux"];
+
+      imports = [
+        "./home/profiles"
+      ];
+    };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  };
 
-  outputs = {self, nixpkgs}@inputs:
-  {
-    nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem {
-        system = "x86-64-linux";
-        modules = [
-          ./configuration.nix
-        ];
-      };
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
     };
   };
 }
